@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ToDoApp</string>
+    <string name="clear_screen">Clear Screen</string>
+    <string name="button_save">Save</string>
+    <string name="reminder_time">Reminder Time</string>
+    <string name="enable_reminder">Enable Reminder</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
 </resources>
