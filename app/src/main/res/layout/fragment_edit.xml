@@ -81,7 +81,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/linearLayoutReminder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textDescription">
+                app:layout_constraintTop_toBottomOf="@+id/textDescription"
+                android:baselineAligned="false">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textDate"
@@ -90,11 +91,13 @@
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
                     android:hint="@string/date"
+                    app:helperText="DD/MM/YYYY"
                     app:startIconDrawable="@drawable/ic_calendar_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="date"
                         tools:ignore="TextContrastCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,11 +108,13 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
                     android:hint="@string/time"
+                    app:helperText="HH:MM"
                     app:startIconDrawable="@drawable/ic_time_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="time"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -134,7 +139,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="@string/enable_reminder" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -144,11 +149,14 @@
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
                     android:hint="@string/reminder_time"
+                    app:helperText="HH:MM"
+                    android:enabled="false"
                     app:startIconDrawable="@drawable/ic_time_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="time"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
