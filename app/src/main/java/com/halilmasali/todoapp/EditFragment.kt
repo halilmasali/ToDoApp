@@ -11,6 +11,8 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.halilmasali.todoapp.databinding.FragmentEditBinding
+import com.halilmasali.todoapp.roomRepository.RoomConnection
+import com.halilmasali.todoapp.roomRepository.TodoData
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -26,17 +28,25 @@ class EditFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentEditBinding.inflate(inflater, container, false)
+        val roomConnection = RoomConnection(requireContext())
         binding.textDate.setStartIconOnClickListener {
             datePicker(binding.textDate.editText)
-        }
-        binding.textTime.setStartIconOnClickListener {
-            timePicker(binding.textTime.editText)
         }
         binding.textReminderTime.setStartIconOnClickListener {
             timePicker(binding.textReminderTime.editText)
         }
         binding.switchReminder.setOnCheckedChangeListener { _, isChecked ->
             binding.textReminderTime.isEnabled = isChecked
+        }
+        binding.buttonSave.setOnClickListener {
+            val data = TodoData(
+                title = binding.textTitle.editText?.text.toString(),
+                description = binding.textDescription.editText?.text.toString(),
+                date = binding.textDate.editText?.text.toString(),
+                reminderTime = binding.textReminderTime.editText?.text.toString(),
+                isDone = false
+            )
+            roomConnection.insertDataToDatabase(data)
         }
         return binding.root
     }
