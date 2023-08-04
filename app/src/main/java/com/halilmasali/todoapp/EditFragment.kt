@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -28,25 +29,21 @@ class EditFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentEditBinding.inflate(inflater, container, false)
-        val roomConnection = RoomConnection(requireContext())
         binding.textDate.setStartIconOnClickListener {
             datePicker(binding.textDate.editText)
+        }
+        binding.topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.textReminderTime.setStartIconOnClickListener {
             timePicker(binding.textReminderTime.editText)
         }
         binding.switchReminder.setOnCheckedChangeListener { _, isChecked ->
             binding.textReminderTime.isEnabled = isChecked
+            binding.textReminderTime.editText?.setText("")
         }
         binding.buttonSave.setOnClickListener {
-            val data = TodoData(
-                title = binding.textTitle.editText?.text.toString(),
-                description = binding.textDescription.editText?.text.toString(),
-                date = binding.textDate.editText?.text.toString(),
-                reminderTime = binding.textReminderTime.editText?.text.toString(),
-                isDone = false
-            )
-            roomConnection.insertDataToDatabase(data)
+            saveDataToDatabase()
         }
         return binding.root
     }
@@ -89,5 +86,38 @@ class EditFragment : Fragment() {
             val selectedDate = dateFormat.format(calendar.time)
             editText?.setText(selectedDate)
         }
+    }
+
+    private fun checkDataFromUser(): Boolean {
+        return binding.textTitle.editText?.text.toString().isNotEmpty() &&
+                binding.textDescription.editText?.text.toString().isNotEmpty() &&
+                binding.textDate.editText?.text.toString().isNotEmpty()
+    }
+
+    private fun saveDataToDatabase() {
+        if (checkDataFromUser()) {
+            if (binding.switchReminder.isChecked &&
+                binding.textReminderTime.editText?.text.toString().isEmpty()
+            ) {
+                Toast.makeText(
+                    requireContext(), "Please select a reminder time",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            } else {
+                val data = TodoData(
+                    title = binding.textTitle.editText?.text.toString(),
+                    description = binding.textDescription.editText?.text.toString(),
+                    date = binding.textDate.editText?.text.toString(),
+                    reminderTime = binding.textReminderTime.editText?.text.toString(),
+                    isDone = false
+                )
+                val roomConnection = RoomConnection(requireContext())
+                roomConnection.insertDataToDatabase(data)
+                Toast.makeText(requireContext(), "Data saved", Toast.LENGTH_SHORT).show()
+                (activity as MainActivity).customFragmentManager.replaceFragment(MainFragment())
+            }
+        } else
+            Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
     }
 }

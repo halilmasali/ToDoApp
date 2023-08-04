@@ -22,6 +22,13 @@ class RoomConnection(context: Context) {
         }
     }
 
+    fun updateDataInDatabase(data: TodoData) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val dataDao = database.dataDao()
+            dataDao.updateData(data)
+        }
+    }
+
     fun getAllDataFromDatabase(): LiveData<Array<TodoData>> {
         val dataDao = database.dataDao()
         val data = MutableLiveData<Array<TodoData>>()

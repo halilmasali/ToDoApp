@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/top_app_bar"
-            app:navigationIcon="@drawable/ic_close_24"
+            app:navigationIcon="@drawable/ic_back_24"
             app:title="Add / Edit" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,7 +29,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textTitle"

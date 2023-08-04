@@ -36,6 +36,18 @@ class CustomTodoItemAdapter(private val items: List<TodoData>) : RecyclerView.Ad
         } else {
             holder.notification.setImageResource(R.drawable.ic_notifications_active)
         }
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            onCheckedChangeListener?.onCheckedChanged(isChecked,item)
+        }
+    }
+
+    interface OnCheckedChangeListener {
+        fun onCheckedChanged(isChecked: Boolean,data: TodoData)
+    }
+    private var onCheckedChangeListener: OnCheckedChangeListener? = null
+
+    fun setOnCheckedChangeListener(onCheckedChangeListener: OnCheckedChangeListener) {
+        this.onCheckedChangeListener = onCheckedChangeListener
     }
 
 }

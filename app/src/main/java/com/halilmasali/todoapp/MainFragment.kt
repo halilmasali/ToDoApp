@@ -15,6 +15,7 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var roomConnection: RoomConnection
+    private lateinit var todoList: ArrayList<TodoData>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,34 +29,63 @@ class MainFragment : Fragment() {
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val todoList = ArrayList<TodoData>()
-        for (i in 0..10) {
-            todoList.add(
-                TodoData(
-                    title = "test",
-                    description = "açıklama",
-                    date = "02/02/0999",
-                    reminderTime = "",
-                    isDone = false
-                )
-            )
-        }
+        todoList = ArrayList<TodoData>()
+        val customTodoItemAdapter = CustomTodoItemAdapter(todoList)
+        binding.recyclerView.adapter = customTodoItemAdapter
+        customTodoItemAdapter.setOnCheckedChangeListener(object :
+            CustomTodoItemAdapter.OnCheckedChangeListener {
+            override fun onCheckedChanged(isChecked: Boolean, data: TodoData) {
+                if (isChecked) {
+                    val replacedData = TodoData(
+                        data.id,
+                        data.title,
+                        data.description,
+                        data.date,
+                        data.reminderTime,
+                        true
+                    )
+                    roomConnection.updateDataInDatabase(replacedData)
+                } else {
+                    val replacedData = TodoData(
+                        data.id,
+                        data.title,
+                        data.description,
+                        data.date,
+                        data.reminderTime,
+                        false
+                    )
+                    roomConnection.updateDataInDatabase(replacedData)
+                }
+            }
+        })
+        getAllDataFromDatabase()
 
 
-
-        val customTodoItem = CustomTodoItemAdapter(todoList)
-        binding.recyclerView.adapter = customTodoItem
-
-        roomConnection.getAllDataFromDatabase().observe(viewLifecycleOwner) { data ->
-            todoList.clear()
-            todoList.addAll(data)
-            binding.recyclerView.adapter?.notifyDataSetChanged()
-        }
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().finish()
+    }
+
+    private fun getAllDataFromDatabase() {
+        val roomConnection = RoomConnection(requireContext())
+        roomConnection.getAllDataFromDatabase().observe(viewLifecycleOwner) { data ->
+            checkIfDatabaseIsEmpty(data)
+            todoList.clear()
+            todoList.addAll(data)
+            binding.recyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun checkIfDatabaseIsEmpty(data: Array<TodoData>) {
+        if (data.isEmpty()) {
+            binding.recyclerView.visibility = View.GONE
+            binding.imageViewEmpty.visibility = View.VISIBLE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.imageViewEmpty.visibility = View.GONE
+        }
     }
 }
