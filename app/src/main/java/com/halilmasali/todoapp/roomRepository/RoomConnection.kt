@@ -44,4 +44,12 @@ class RoomConnection(context: Context) {
             dataDao.deleteData(data)
         }
     }
+
+    fun isDatabaseOpen(): Boolean {
+        return database.isOpen
+    }
+
+    fun closeDatabase() {
+        database.close()
+    }
 }

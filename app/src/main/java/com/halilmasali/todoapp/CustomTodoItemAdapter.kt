@@ -3,10 +3,12 @@ package com.halilmasali.todoapp
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.halilmasali.todoapp.databinding.CustomTodoItemBinding
+import com.halilmasali.todoapp.roomRepository.RoomConnection
 import com.halilmasali.todoapp.roomRepository.TodoData
 
-class CustomTodoItemAdapter(private val items: List<TodoData>) : RecyclerView.Adapter<CustomTodoItemAdapter.ViewHolder>() {
+class CustomTodoItemAdapter(private val items: MutableList<TodoData>) : RecyclerView.Adapter<CustomTodoItemAdapter.ViewHolder>() {
 
     private lateinit var binding: CustomTodoItemBinding
 
@@ -48,6 +50,23 @@ class CustomTodoItemAdapter(private val items: List<TodoData>) : RecyclerView.Ad
 
     fun setOnCheckedChangeListener(onCheckedChangeListener: OnCheckedChangeListener) {
         this.onCheckedChangeListener = onCheckedChangeListener
+    }
+
+    fun removeAt(position: Int) {
+        MaterialAlertDialogBuilder(binding.root.context)
+            .setTitle("Delete")
+            .setMessage("Are you sure you want to delete this item?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { _, _ ->
+                val roomConnection = RoomConnection(binding.root.context)
+                roomConnection.deleteDataFromDatabase(items[position])
+                items.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            .setNegativeButton("No") { _, _ ->
+                notifyItemChanged(position)
+            }
+            .show()
     }
 
 }
