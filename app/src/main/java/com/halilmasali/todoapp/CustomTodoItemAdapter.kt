@@ -8,7 +8,8 @@ import com.halilmasali.todoapp.databinding.CustomTodoItemBinding
 import com.halilmasali.todoapp.roomRepository.RoomConnection
 import com.halilmasali.todoapp.roomRepository.TodoData
 
-class CustomTodoItemAdapter(private val items: MutableList<TodoData>) : RecyclerView.Adapter<CustomTodoItemAdapter.ViewHolder>() {
+class CustomTodoItemAdapter(private val items: MutableList<TodoData>) :
+    RecyclerView.Adapter<CustomTodoItemAdapter.ViewHolder>() {
 
     private lateinit var binding: CustomTodoItemBinding
 
@@ -25,7 +26,7 @@ class CustomTodoItemAdapter(private val items: MutableList<TodoData>) : Recycler
     }
 
     override fun getItemCount(): Int {
-       return items.size
+        return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,13 +40,14 @@ class CustomTodoItemAdapter(private val items: MutableList<TodoData>) : Recycler
             holder.notification.setImageResource(R.drawable.ic_notifications_active)
         }
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            onCheckedChangeListener?.onCheckedChanged(isChecked,item)
+            onCheckedChangeListener?.onCheckedChanged(isChecked, item)
         }
     }
 
     interface OnCheckedChangeListener {
-        fun onCheckedChanged(isChecked: Boolean,data: TodoData)
+        fun onCheckedChanged(isChecked: Boolean, data: TodoData)
     }
+
     private var onCheckedChangeListener: OnCheckedChangeListener? = null
 
     fun setOnCheckedChangeListener(onCheckedChangeListener: OnCheckedChangeListener) {
@@ -68,5 +70,4 @@ class CustomTodoItemAdapter(private val items: MutableList<TodoData>) : Recycler
             }
             .show()
     }
-
 }

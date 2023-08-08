@@ -33,45 +33,16 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         roomConnection = RoomConnection(requireContext())
-
         binding.floatingActionButton.setOnClickListener {
             (activity as MainActivity).customFragmentManager.replaceFragment(EditFragment())
         }
-
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         todoList = ArrayList<TodoData>()
         customTodoItemAdapter = CustomTodoItemAdapter(todoList)
         binding.recyclerView.adapter = customTodoItemAdapter
         swipeDeleteListener()
-        customTodoItemAdapter.setOnCheckedChangeListener(object :
-            CustomTodoItemAdapter.OnCheckedChangeListener {
-            override fun onCheckedChanged(isChecked: Boolean, data: TodoData) {
-                if (isChecked) {
-                    val replacedData = TodoData(
-                        data.id,
-                        data.title,
-                        data.description,
-                        data.date,
-                        data.reminderTime,
-                        true
-                    )
-                    roomConnection.updateDataInDatabase(replacedData)
-                } else {
-                    val replacedData = TodoData(
-                        data.id,
-                        data.title,
-                        data.description,
-                        data.date,
-                        data.reminderTime,
-                        false
-                    )
-                    roomConnection.updateDataInDatabase(replacedData)
-                }
-            }
-        })
+        checkedChangeListener()
         getAllDataFromDatabase()
-
-
         return binding.root
     }
 
@@ -142,13 +113,32 @@ class MainFragment : Fragment() {
                 val itemHeight = itemView.bottom - itemView.top
                 val isCanceled = dX == 0f && !isCurrentlyActive
                 if (isCanceled) {
-                    clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    clearCanvas(
+                        c,
+                        itemView.right + dX,
+                        itemView.top.toFloat(),
+                        itemView.right.toFloat(),
+                        itemView.bottom.toFloat()
+                    )
+                    super.onChildDraw(
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
                     return
                 }
                 // Draw the red delete background
                 background.color = Color.parseColor("#f44336")
-                background.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
+                background.setBounds(
+                    itemView.right + dX.toInt(),
+                    itemView.top,
+                    itemView.right,
+                    itemView.bottom
+                )
                 background.draw(c)
 
                 // Calculate position of delete icon
@@ -159,15 +149,64 @@ class MainFragment : Fragment() {
                 val deleteIconBottom = deleteIconTop + intrinsicHeight
 
                 // Draw the delete icon
-                deleteIcon?.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
+                deleteIcon?.setBounds(
+                    deleteIconLeft,
+                    deleteIconTop,
+                    deleteIconRight,
+                    deleteIconBottom
+                )
                 deleteIcon?.draw(c)
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
             }
-            private fun clearCanvas(c: Canvas?, left: Float, top: Float, right: Float, bottom: Float) {
+
+            private fun clearCanvas(
+                c: Canvas?,
+                left: Float,
+                top: Float,
+                right: Float,
+                bottom: Float
+            ) {
                 c?.drawRect(left, top, right, bottom, clearPaint)
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun checkedChangeListener() {
+        customTodoItemAdapter.setOnCheckedChangeListener(object :
+            CustomTodoItemAdapter.OnCheckedChangeListener {
+            override fun onCheckedChanged(isChecked: Boolean, data: TodoData) {
+                if (isChecked) {
+                    val replacedData = TodoData(
+                        data.id,
+                        data.title,
+                        data.description,
+                        data.date,
+                        data.reminderTime,
+                        true
+                    )
+                    roomConnection.updateDataInDatabase(replacedData)
+                } else {
+                    val replacedData = TodoData(
+                        data.id,
+                        data.title,
+                        data.description,
+                        data.date,
+                        data.reminderTime,
+                        false
+                    )
+                    roomConnection.updateDataInDatabase(replacedData)
+                }
+            }
+        })
     }
 }
