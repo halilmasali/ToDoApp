@@ -12,6 +12,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.halilmasali.todoapp.databinding.FragmentEditBinding
+import com.halilmasali.todoapp.notification.Notification
 import com.halilmasali.todoapp.roomRepository.RoomConnection
 import com.halilmasali.todoapp.roomRepository.TodoData
 import java.text.SimpleDateFormat
@@ -23,6 +24,7 @@ class EditFragment : Fragment() {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
+    private lateinit var reminder: Notification
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +47,7 @@ class EditFragment : Fragment() {
         binding.buttonSave.setOnClickListener {
             saveDataToDatabase()
         }
+        reminder = Notification(requireContext())
         return binding.root
     }
 
@@ -116,8 +119,23 @@ class EditFragment : Fragment() {
                 roomConnection.insertDataToDatabase(data)
                 Toast.makeText(requireContext(), "Data saved", Toast.LENGTH_SHORT).show()
                 (activity as MainActivity).customFragmentManager.replaceFragment(MainFragment())
+                val time = getTime()
+                if (time > System.currentTimeMillis())
+                    println(
+                        "Time is bigger than current time." +
+                                " Selected: $time  Current: ${System.currentTimeMillis()}"
+                    )
+                reminder.scheduleNotification("Reminder", "You have a reminder", time)
             }
         } else
             Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getTime(): Long {
+        val (hour, minute) = binding.textReminderTime.editText?.text.toString().split(":")
+        val (day, month, year) = binding.textDate.editText?.text.toString().split("/")
+        val calendar = Calendar.getInstance()
+        calendar.set(year.toInt(), month.toInt(), day.toInt(), hour.toInt(), minute.toInt())
+        return calendar.timeInMillis
     }
 }
