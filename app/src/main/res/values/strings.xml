@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToDoApp</string>
+    <string name="app_name">Todo App</string>
     <string name="clear_screen">Clear Screen</string>
     <string name="button_save">Save</string>
     <string name="reminder_time">Reminder Time</string>
