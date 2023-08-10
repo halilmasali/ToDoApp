@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import com.halilmasali.todoapp.MainActivity
+import com.halilmasali.todoapp.ui.MainActivity
 
 class Notification(private val context: Context) {
 

@@ -1,4 +1,4 @@
-package com.halilmasali.todoapp
+package com.halilmasali.todoapp.ui.fragments
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

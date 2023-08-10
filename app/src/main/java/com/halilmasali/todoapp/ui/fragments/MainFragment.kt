@@ -1,4 +1,4 @@
-package com.halilmasali.todoapp
+package com.halilmasali.todoapp.ui.fragments
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -18,6 +18,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.halilmasali.todoapp.databinding.FragmentMainBinding
 import com.halilmasali.todoapp.roomRepository.RoomConnection
 import com.halilmasali.todoapp.roomRepository.TodoData
+import com.halilmasali.todoapp.viewModels.EditViewModel
+import androidx.fragment.app.activityViewModels
+import com.halilmasali.todoapp.ui.adapters.CustomTodoItemAdapter
+import com.halilmasali.todoapp.ui.MainActivity
+import com.halilmasali.todoapp.R
 
 class MainFragment : Fragment() {
 
@@ -26,6 +31,7 @@ class MainFragment : Fragment() {
     private lateinit var roomConnection: RoomConnection
     private lateinit var todoList: ArrayList<TodoData>
     private lateinit var customTodoItemAdapter: CustomTodoItemAdapter
+    private val viewModel: EditViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +40,7 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         roomConnection = RoomConnection(requireContext())
         binding.floatingActionButton.setOnClickListener {
+            viewModel.clearSelectedItem()
             (activity as MainActivity).customFragmentManager.replaceFragment(EditFragment())
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -206,6 +213,11 @@ class MainFragment : Fragment() {
                     )
                     roomConnection.updateDataInDatabase(replacedData)
                 }
+            }
+
+            override fun onItemClicked(data: TodoData) {
+                viewModel.selectItem(data)
+                (activity as MainActivity).customFragmentManager.replaceFragment(EditFragment())
             }
         })
     }

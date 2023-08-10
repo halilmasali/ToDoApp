@@ -8,4 +8,6 @@
     <string name="date">Date</string>
     <string name="description">Description</string>
     <string name="title">Title</string>
+    <string name="button_update">Update</string>
+    <string name="reminder_check">Please select a reminder time</string>
 </resources>

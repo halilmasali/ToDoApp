@@ -1,7 +1,10 @@
-package com.halilmasali.todoapp
+package com.halilmasali.todoapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.halilmasali.todoapp.R
+import com.halilmasali.todoapp.ui.fragments.CustomFragmentManager
+import com.halilmasali.todoapp.ui.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

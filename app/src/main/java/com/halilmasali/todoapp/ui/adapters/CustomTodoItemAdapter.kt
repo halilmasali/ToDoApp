@@ -1,9 +1,10 @@
-package com.halilmasali.todoapp
+package com.halilmasali.todoapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.halilmasali.todoapp.R
 import com.halilmasali.todoapp.databinding.CustomTodoItemBinding
 import com.halilmasali.todoapp.roomRepository.RoomConnection
 import com.halilmasali.todoapp.roomRepository.TodoData
@@ -42,10 +43,14 @@ class CustomTodoItemAdapter(private val items: MutableList<TodoData>) :
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             onCheckedChangeListener?.onCheckedChanged(isChecked, item)
         }
+        holder.itemView.setOnClickListener {
+            onCheckedChangeListener?.onItemClicked(item)
+        }
     }
 
     interface OnCheckedChangeListener {
         fun onCheckedChanged(isChecked: Boolean, data: TodoData)
+        fun onItemClicked(data: TodoData)
     }
 
     private var onCheckedChangeListener: OnCheckedChangeListener? = null
