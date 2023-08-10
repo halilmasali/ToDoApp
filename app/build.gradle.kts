@@ -48,6 +48,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     // Room Library
     implementation("androidx.room:room-runtime:2.5.2")
+    // SplashScreen
+    implementation("androidx.core:core-splashscreen:1.0.1")
     ksp("androidx.room:room-compiler:2.5.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

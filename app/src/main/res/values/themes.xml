@@ -29,5 +29,10 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="Theme.ToDoApp" parent="Base.Theme.ToDoApp" />
+    <style name="Theme.MyApp.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.ToDoApp</item>
+        <item name="colorControlNormal">@color/black</item>
+    </style>
 </resources>
